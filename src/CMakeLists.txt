@@ -6,7 +6,7 @@
 add_library(example_lib lib.cpp ${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
-target_include_directories(exaple_lib PUBLIC ../include)
+target_include_directories(example_lib PUBLIC ../include)
 
 
 #target_link_libraries(example_lib PRIVATE Boost::boost)
