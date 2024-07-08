@@ -27,6 +27,9 @@ add_subdirectory(glfw)
 # adding glad from source
 add_subdirectory(glad)
 
+# adding fmtlib from source
+add_subdirectory(fmt)
+
 # lib src code
 add_subdirectory(src)
 

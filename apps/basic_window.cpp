@@ -2,24 +2,26 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
+#include <fmt/format.h>
+#include <fmt/ostream.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
     glViewport(0, 0, width, height);
 }  
 int main(void){
     if(!glfwInit()){
-        std::cout << "init failed" << std::endl;
+        fmt::println("init failed");
     }
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     GLFWwindow* window = glfwCreateWindow(100, 100, "My Title", nullptr, nullptr);
     if(!window){
-        std::cout << "window create failed" << std::endl;
+        fmt::println("window create failed");
     }
     glfwMakeContextCurrent(window);
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        std::cout << "Failed to initialize GLAD" << std::endl;
+        fmt::println("Failed to initialize GLAD");
         return -1;
     }
     glViewport(0, 0, 100, 100);
@@ -28,9 +30,7 @@ int main(void){
         glfwSwapBuffers(window);
         glfwPollEvents();    
     }
-    std::cerr << "how did we get here" << std::endl;
-    std::string s;
-    std::getline(std::cin, s);
+    fmt::println(std::cerr, "Window Closed");
     glfwDestroyWindow(window);
     glfwTerminate();
     return 0;

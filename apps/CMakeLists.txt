@@ -2,6 +2,6 @@
 
 add_executable(basic_window basic_window.cpp)
 
-target_link_libraries(basic_window PUBLIC glad glfw)
+target_link_libraries(basic_window PUBLIC glad glfw fmt)
 
 target_compile_features(basic_window PRIVATE cxx_std_20)
