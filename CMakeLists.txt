@@ -24,6 +24,8 @@ set(CMAKE_CXX_FLAGS "-Wall -pedantic")
 # adding glfw from source
 add_subdirectory(glfw)
 
+# adding glad from source
+add_subdirectory(glad)
 
 # lib src code
 add_subdirectory(src)
@@ -31,7 +33,3 @@ add_subdirectory(src)
 # app source code
 add_subdirectory(apps)
 
-# adding glad from source it's more complicated than the others
-set(GLAD_SOURCES_DIR "${PROJECT_SOURCE_DIR}/glad/")
-add_subdirectory(glad/cmake glad_cmake)
-glad_add_library(glad STATIC API gl:core=3.3)
