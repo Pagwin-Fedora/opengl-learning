@@ -3,15 +3,15 @@
 # example from when I was doing raft cpp impl
 #set(HEADER_LIST "${raft_cpp_impl_SOURCE_DIR}/include/raft/lib.hpp")
 
-add_library(example_lib lib.cpp ${HEADER_LIST})
+add_library(utils lib.cpp ${HEADER_LIST})
 
 # We need this directory, and users of our library will need it too
-target_include_directories(example_lib PUBLIC ../include)
+target_include_directories(utils PUBLIC ../include)
 
 
 #target_link_libraries(example_lib PRIVATE Boost::boost)
 
-target_compile_features(example_lib PUBLIC cxx_std_17)
+target_compile_features(utils PUBLIC cxx_std_17)
 
 # IDEs should put the headers in a nice place
 source_group(
