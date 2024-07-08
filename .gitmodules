@@ -1,3 +1,6 @@
 [submodule "glfw"]
 	path = glfw
 	url = ./glfw
+[submodule "glad"]
+	path = glad
+	url = git@github.com:Dav1dde/glad.git
