@@ -15,10 +15,12 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 #find_package(Boost REQUIRED)
 #find_package(fmt REQUIRED)
 
+# adding glfw from source
+add_subdirectory(glfw)
+
 # lib src code
 add_subdirectory(src)
 
 # app source code
 add_subdirectory(apps)
-
 
