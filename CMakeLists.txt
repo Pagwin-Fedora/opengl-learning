@@ -11,6 +11,12 @@ project(project_name_here
 # setting this so compile_commands.json is generated for clangd
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 
+# allowances for debugging
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+
+# generally useful
+set(CMAKE_CXX_FLAGS "-Wall -pedantic")
+
 # for convenience if they're needed
 #find_package(Boost REQUIRED)
 #find_package(fmt REQUIRED)
@@ -18,9 +24,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 # adding glfw from source
 add_subdirectory(glfw)
 
+
 # lib src code
 add_subdirectory(src)
 
 # app source code
 add_subdirectory(apps)
 
+# adding glad from source it's more complicated than the others
+set(GLAD_SOURCES_DIR "${PROJECT_SOURCE_DIR}/glad/")
+add_subdirectory(glad/cmake glad_cmake)
+glad_add_library(glad STATIC API gl:core=3.3)
