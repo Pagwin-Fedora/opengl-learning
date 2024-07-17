@@ -15,7 +15,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 # generally useful
-set(CMAKE_CXX_FLAGS "-Wall -pedantic")
+set(CMAKE_CXX_FLAGS "-Wall -pedantic -Wextra -Wfloat-equal -Wundef -Wpointer-arith -Wcast-align -Wstrict-overflow=2 -Wunreachable-code")
 
 # for convenience if they're needed
 #find_package(Boost REQUIRED)
