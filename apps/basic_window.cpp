@@ -5,7 +5,11 @@
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 
+#pragma clang diagnostic push 
+// ignoring the fact that window is not used
+#pragma clang diagnostic ignored "-Wunused-parameter"
 void framebuffer_size_callback(GLFWwindow* window, int width, int height){
+#pragma clang diagnostic pop
     glViewport(0, 0, width, height);
 }  
 int main(void){
