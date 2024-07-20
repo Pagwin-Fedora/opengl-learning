@@ -8,8 +8,8 @@ add_library(utils lib.cpp ${HEADER_LIST})
 # We need this directory, and users of our library will need it too
 target_include_directories(utils PUBLIC ../include)
 
-
-#target_link_libraries(example_lib PRIVATE Boost::boost)
+# the libs
+target_link_libraries(utils PUBLIC glad glfw fmt)
 
 target_compile_features(utils PUBLIC cxx_std_17)
 
