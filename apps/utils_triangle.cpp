@@ -38,14 +38,14 @@ int main(void){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     
-
-    pog::VertexArray VAO{[](){
+    pog::VertexBuffer VBO;
+    pog::VertexArray VAO{[&VBO](){
         GLfloat vertices[]{
             -0.5f, -0.5f, 0.0f,
              0.5f, -0.5f, 0.0f,
              0.0f,  0.5f, 0.0f
         };
-        pog::VertexBuffer VBO{static_cast<void*>(vertices), 9*sizeof(GLfloat), GL_STATIC_DRAW};
+        VBO = pog::VertexBuffer{static_cast<void*>(vertices), 9*sizeof(GLfloat), GL_STATIC_DRAW};
 
         // tell opengl what the values received by the vertex are
         // first arg provides the location value that that shader uses

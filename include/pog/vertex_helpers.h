@@ -7,9 +7,12 @@ namespace pog {
         GLuint id;
         bool moved;
         public:
+        VertexBuffer();
         VertexBuffer(void* data, std::size_t size, GLenum usage);
         VertexBuffer(VertexBuffer&& rhs);
+        VertexBuffer& operator=(VertexBuffer&& rhs);
         VertexBuffer(VertexBuffer&) = delete;
+        VertexBuffer operator=(VertexBuffer&) = delete;
         ~VertexBuffer();
         GLuint get_id();
     };
@@ -19,7 +22,9 @@ namespace pog {
         public:
         VertexArray(std::function<void()> within_array);
         VertexArray(VertexArray&& rhs);
+        VertexArray& operator=(VertexArray&& rhs);
         VertexArray(VertexBuffer&) = delete;
+        VertexBuffer operator=(VertexBuffer&) = delete;
         ~VertexArray();
         void use(std::function<void()> ops);
     };

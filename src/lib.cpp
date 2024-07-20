@@ -4,6 +4,9 @@
 #include <GLFW/glfw3.h>
 #include <pog/vertex_helpers.h>
 
+pog::VertexBuffer::VertexBuffer(){
+    moved = true;
+}
 pog::VertexBuffer::VertexBuffer(void* data, std::size_t size, GLenum usage){
     glGenBuffers(1, &id);
     moved = false;
@@ -14,6 +17,12 @@ pog::VertexBuffer::VertexBuffer(VertexBuffer&& rhs){
     id = rhs.id;
     moved = false;
     rhs.moved = true;
+}
+pog::VertexBuffer& pog::VertexBuffer::operator=(VertexBuffer&& rhs){
+    this->id = rhs.id;
+    rhs.moved = true;
+    this->moved = false;
+    return *this;
 }
 pog::VertexBuffer::~VertexBuffer(){
     if(!moved) glDeleteBuffers(1, &id);
@@ -32,6 +41,12 @@ pog::VertexArray::VertexArray(VertexArray&& rhs){
     id = rhs.id;
     moved = false;
     rhs.moved = true;
+}
+pog::VertexArray& pog::VertexArray::operator=(VertexArray&& rhs){
+    this->id = rhs.id;
+    rhs.moved = true;
+    this->moved = false;
+    return *this;
 }
 pog::VertexArray::~VertexArray(){
     if(!moved) glDeleteBuffers(1, &id);
