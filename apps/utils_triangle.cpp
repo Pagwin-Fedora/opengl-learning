@@ -4,6 +4,7 @@
 #include <iostream>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
+#include <memory>
 #include <pog/vertex_helpers.h>
 
 #pragma clang diagnostic push
@@ -38,14 +39,15 @@ int main(void){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     
-
-    pog::VertexArray VAO{[](){
+    pog::VertexArray VAO{[](std::vector<std::unique_ptr<pog::VertexArrayState>>& state){
         GLfloat vertices[]{
             -0.5f, -0.5f, 0.0f,
              0.5f, -0.5f, 0.0f,
              0.0f,  0.5f, 0.0f
         };
-        pog::VertexBuffer VBO{static_cast<void*>(vertices), 9*sizeof(GLfloat), GL_STATIC_DRAW};
+        auto VBO = std::make_unique<pog::VertexBuffer>(static_cast<void*>(vertices), 9*sizeof(GLfloat), GL_STATIC_DRAW);
+        
+        state.push_back(std::move(VBO));
 
         // tell opengl what the values received by the vertex are
         // first arg provides the location value that that shader uses
@@ -142,7 +144,10 @@ int main(void){
 
         // the triangle has finally materialized and oh my god I'm definitely not going to continue until I've written a utility library because that's about 121 lines of poorly documented poorly understood code that's such a pain in the ass to have written out
         glUseProgram(shaderProgram);
-        VAO.use([](){
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wunused-parameter"
+        VAO.use([](auto& _state){
+        #pragma clang diagnostic pop
             // first arg is thing we want to draw, second argument is the starting index of the array, last argument is number of vertices
             glDrawArrays(GL_TRIANGLES, 0, 3);
         });
