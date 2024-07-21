@@ -5,6 +5,7 @@
 #include <GLFW/glfw3.h>
 #include <memory>
 #include <pog/vertex_helpers.h>
+#include <variant>
 
 pog::VertexBuffer::VertexBuffer(){
     moved = true;
@@ -15,7 +16,7 @@ pog::VertexBuffer::VertexBuffer(void* data, std::size_t size, GLenum usage){
     glBindBuffer(GL_ARRAY_BUFFER, id);
     glBufferData(GL_ARRAY_BUFFER, size, data, usage);
 }
-pog::VertexBuffer::VertexBuffer(VertexBuffer&& rhs):VertexArrayState(){
+pog::VertexBuffer::VertexBuffer(VertexBuffer&& rhs){
     id = rhs.id;
     moved = false;
     rhs.moved = true;
@@ -36,7 +37,7 @@ GLuint pog::VertexBuffer::get_id(){
     return id;
 }
 
-pog::VertexArray::VertexArray(std::function<void(std::vector<std::unique_ptr<VertexArrayState>>&)> within_array):state{}{
+pog::VertexArray::VertexArray(std::function<void(std::vector<VertexArrayState>&)> within_array):state{}{
     glGenVertexArrays(1, &id);
     moved = false;
     glBindVertexArray(id);
@@ -56,7 +57,7 @@ pog::VertexArray& pog::VertexArray::operator=(VertexArray&& rhs){
 pog::VertexArray::~VertexArray(){
     if(!moved) glDeleteBuffers(1, &id);
 }
-void pog::VertexArray::use(std::function<void(std::vector<std::unique_ptr<VertexArrayState>>&)> ops){
+void pog::VertexArray::use(std::function<void(std::vector<VertexArrayState>&)> ops){
     glBindVertexArray(id);
     ops(this->state);
 }

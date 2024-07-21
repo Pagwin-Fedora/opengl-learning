@@ -3,17 +3,11 @@
 #include <cstddef>
 #include <functional>
 #include <memory>
+#include <variant>
 #include <vector>
 namespace pog {
     // class that only exists so the VAO can own buffers and what not
-    class VertexArrayState{
-        public:
-        VertexArrayState(){}
-        virtual ~VertexArrayState(){};
-        VertexArrayState(VertexArrayState&) = delete;
-        VertexArrayState operator=(VertexArrayState&) = delete;
-    };
-    class VertexBuffer:public VertexArrayState{
+    class VertexBuffer{
         GLuint id;
         bool moved;
         public:
@@ -23,21 +17,21 @@ namespace pog {
         VertexBuffer& operator=(VertexBuffer&& rhs);
         VertexBuffer(VertexBuffer&) = delete;
         VertexBuffer operator=(VertexBuffer&) = delete;
-        ~VertexBuffer() override;
+        ~VertexBuffer();
         GLuint get_id();
     };
-    VertexArrayState from_buffer(VertexBuffer);
+    using VertexArrayState = std::variant<VertexBuffer>;
     class VertexArray{
         GLuint id;
         bool moved;
-        std::vector<std::unique_ptr<VertexArrayState>> state;
+        std::vector<VertexArrayState> state;
         public:
-        VertexArray(std::function<void(std::vector<std::unique_ptr<VertexArrayState>>&)> initialize_state);
+        VertexArray(std::function<void(std::vector<VertexArrayState>&)> initialize_state);
         VertexArray(VertexArray&& rhs);
         VertexArray& operator=(VertexArray&& rhs);
         VertexArray(VertexBuffer&) = delete;
         VertexBuffer operator=(VertexBuffer&) = delete;
         ~VertexArray();
-        void use(std::function<void(std::vector<std::unique_ptr<VertexArrayState>>&)> ops);
+        void use(std::function<void(std::vector<VertexArrayState>&)> ops);
     };
 }

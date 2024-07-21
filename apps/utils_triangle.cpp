@@ -39,13 +39,13 @@ int main(void){
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     
-    pog::VertexArray VAO{[](std::vector<std::unique_ptr<pog::VertexArrayState>>& state){
+    pog::VertexArray VAO{[](std::vector<pog::VertexArrayState>& state){
         GLfloat vertices[]{
             -0.5f, -0.5f, 0.0f,
              0.5f, -0.5f, 0.0f,
              0.0f,  0.5f, 0.0f
         };
-        auto VBO = std::make_unique<pog::VertexBuffer>(static_cast<void*>(vertices), 9*sizeof(GLfloat), GL_STATIC_DRAW);
+        auto VBO = pog::VertexBuffer(static_cast<void*>(vertices), 9*sizeof(GLfloat), GL_STATIC_DRAW);
         
         state.push_back(std::move(VBO));
 
