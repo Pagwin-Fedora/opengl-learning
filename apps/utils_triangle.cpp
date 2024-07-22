@@ -4,8 +4,8 @@
 #include <iostream>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
-#include <memory>
 #include <pog/vertex_helpers.h>
+#include <pog/shader_helpers.h>
 
 #pragma clang diagnostic push
 // ignoring the fact that window is not used
