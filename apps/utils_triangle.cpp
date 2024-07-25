@@ -2,16 +2,13 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
+#include <vector>
 #include <fmt/format.h>
 #include <fmt/ostream.h>
 #include <pog/vertex_helpers.h>
 #include <pog/shader_helpers.h>
 
-#pragma clang diagnostic push
-// ignoring the fact that window is not used
-#pragma clang diagnostic ignored "-Wunused-parameter"
-void framebuffer_size_callback(GLFWwindow* window, int width, int height){
-#pragma clang diagnostic pop
+void framebuffer_size_callback(GLFWwindow*, int width, int height){
     glViewport(0, 0, width, height);
 }
 
@@ -61,7 +58,6 @@ int main(void){
         glEnableVertexAttribArray(0);
     }};
 
-    // see the vertex shader part of the above page
     
     // TODO: if reading this in the future split this shader into a separate file and use std::embed
     const char *vertexShaderSource = "#version 330 core\n"
@@ -71,27 +67,8 @@ int main(void){
         "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
         "}\0";
 
-    // need to use opengl create shader function more silly ids
-    // tutorial uses `unsigned int` instead of GLuint
-    // the tutorial is wrong https://stackoverflow.com/a/12285564
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    auto vertexShader = pog::Shader(GL_VERTEX_SHADER, vertexShaderSource);
 
-    // compile the above shader source code into the shader we just made
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-    glCompileShader(vertexShader);
-
-    // get error info for the shader we compiled
-    // the tutorial uses `int` instead of GLint
-    // the tutorial is wrong https://stackoverflow.com/a/12285564
-    GLint  success;
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if(!success){
-        char infoLog[512];
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        fmt::println("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n{}", infoLog);
-    }
-
-    // repeat of the above for a fragment shader instead of a vertex shader
     const char* fragmentShaderSource = 
         "#version 330 core\n"
         "out vec4 FragColor;\n"
@@ -101,39 +78,16 @@ int main(void){
         "    FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
         "}\0";
 
-    GLuint fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-    glCompileShader(fragmentShader);
+    //GLuint fragmentShader;
+    auto fragmentShader = pog::Shader(GL_FRAGMENT_SHADER, fragmentShaderSource);
 
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-    if(!success){
-        char infoLog[512];
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        fmt::println("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n{}", infoLog);
-    }
-
+    std::vector<pog::Shader> shaders{};
+    shaders.push_back(std::move(vertexShader));
+    shaders.push_back(std::move(fragmentShader));
     // shader program
     // combines the above shaders into one thing
-    GLuint shaderProgram = glCreateProgram();
-
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-    if(!success) {
-        char infoLog[512];
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-        fmt::println("ERROR::SHADER::PROGRAM::LINK_FAILED\n{}", infoLog);
-    }
-
-    glUseProgram(shaderProgram);
-
-    // shaders are now linked into program so we can yeet them
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
+    //GLuint shaderProgram = glCreateProgram();
+    auto shaderProgram = pog::ShaderProgram(std::move(shaders));
 
     while(!glfwWindowShouldClose(window)){
         process_input(window);
@@ -143,7 +97,7 @@ int main(void){
         glClear(GL_COLOR_BUFFER_BIT);
 
         // the triangle has finally materialized and oh my god I'm definitely not going to continue until I've written a utility library because that's about 121 lines of poorly documented poorly understood code that's such a pain in the ass to have written out
-        glUseProgram(shaderProgram);
+        shaderProgram.use();
         #pragma clang diagnostic push
         #pragma clang diagnostic ignored "-Wunused-parameter"
         VAO.use([](auto& _state){
